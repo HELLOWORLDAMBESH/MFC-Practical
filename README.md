@@ -33,3 +33,4 @@ print("Transpose A^T:\n", At)
 # conjugate transpose (Hermitian)
 A_h = np.conjugate(A.T)
 print("Conjugate transpose (A^H):\n", A_h)
+
