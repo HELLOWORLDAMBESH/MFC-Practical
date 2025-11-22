@@ -1,0 +1,418 @@
+# mathematics-for-computing-practical
+# Q1. Creating a vector matrix and the transpose of that vector matrix. 
+
+a. transpose of a vector (matrix)
+
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+
+    # Program to find the transpose of a matrix
+
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: "))
+
+    entries = list(map(float, input("Enter the elements separated by space: ").split()))
+
+    A = np.array(entries).reshape(NR, NC)
+
+    Transpose = np.transpose(A)
+
+    print("Transpose of matrix A:\n", Transpose)
+
+           
+# Q2. Generating echelon form of a Matrix and finding its rank.      
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+    # ECHELON FORM AND RANK OF A MATRIX 
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: ")) 
+    Elements = [] 
+    print("Enter elements row by row:")
+    for i in range(NR):
+        row = list(map(float, input().split()))
+        Elements.append(row)
+    A = np.array(Elements)
+    A = sp.Matrix(A) 
+    print("User defined matrix:")
+    print(A)
+    Echelon = A.echelon_form()
+    Rank = A.rank() 
+    print("Echelon form:")
+    print(Echelon)
+
+# Q3. Finding Determinant, Inverse, Cofactor and Adjoint of a Matrix. 
+
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: ")) 
+    Elements = []
+    print("Enter elements row by row:") 
+    for i in range(NR):
+        row = list(map(float, input().split()))
+        Elements.append(row) 
+        # CREATE MATRICES
+    A_sympy = sp.Matrix(Elements)
+    A_numpy = np.array(Elements, dtype=np.float64) 
+    print("\nUser defined matrix (SymPy):\n", A_sympy)
+    print("\nUser defined matrix (NumPy):\n", A_numpy)
+    try:
+        # DETERMINANT
+        DETERMINANT = np.linalg.det(A_numpy)
+        print("\nDeterminant of matrix:", DETERMINANT) 
+        if DETERMINANT != 0:
+            # INVERSE
+            INVERSE = np.linalg.inv(A_numpy)
+            print("\nInverse of matrix:\n", INVERSE) 
+            # TRANSPOSE
+            TRANSPOSE = np.transpose(A_numpy)
+            print("\nTranspose of matrix:\n", TRANSPOSE) 
+        # ADJOINT using SymPy
+            ADJOINT = A_sympy.adjugate()
+            print("\nAdjoint of matrix:\n", ADJOINT)
+         # COFACTOR = transpose of adjoint
+            COFACTOR = ADJOINT.T
+            print("\nCofactor of matrix:\n", COFACTOR)
+        else:
+            print("\nMatrix is singular, inverse does not exist.")
+    except np.linalg.LinAlgError:
+        print("\nCould not calculate inverse. Matrix might be singular or not square.")
+        
+
+# Q4. Solving Homogenous system of equation using Gauss elimination.
+
+
+Input (code)
+
+    # solving homogeneous system of equations using Gauss elimination
+    import sympy as sp
+    import numpy as np
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: "))
+    Elements = []
+    print("Enter elements row by row:")
+    for i in range(NR):
+        row = list(map(float, input().split()))
+        Elements.append(row)
+    # Create SymPy and NumPy matrices
+    A_sympy = sp.Matrix(Elements)
+    A_numpy = np.array(Elements, dtype=np.float64)
+    print("User defined matrix (SymPy):")
+    print(A_sympy)
+    print("\nUser defined matrix (NumPy):")
+    print(A_numpy)
+    # Constant matrix (zero matrix for homogeneous system)
+    Constant_Matrix = np.zeros(NR)
+    print("\nConstant Matrix (Zero Vector):", Constant_Matrix)
+    # Check if determinant is zero
+    if NR == NC and np.linalg.det(A_numpy) != 0:
+        X = np.linalg.solve(A_numpy, Constant_Matrix)
+        print("\nUNIQUE SOLUTION:", X)
+    else:
+        print("\nNO UNIQUE SOLUTION (Infinite solutions or system is underdetermined).")
+        print("Using SymPy to find general solution:")
+
+        sol = A_sympy.gauss_jordan_solve(sp.zeros(NR, 1))
+        print("General Solution:")
+        print(sol)
+
+#  Q5.Solving Homogenous system of equations using Gauss Jordan
+Input (code)
+
+    # Solving Homogeneous System of Equations using Gauss Elimination
+    import sympy as sp
+    import numpy as np
+    NR = int(input("Enter no. of rows: "))
+    NC = int(input("Enter no. of columns: "))
+    Elements = []
+    print("Enter elements row by row:")
+    for i in range(NR):
+        row = list(map(float, input().split()))
+        Elements.append(row)
+    # SymPy Matrix
+    A_sympy = sp.Matrix(Elements)
+    # NumPy Matrix
+    A_numpy = np.array(Elements, dtype=np.float64)
+    print("\nUser defined matrix (SymPy):")
+    print(A_sympy)
+    print("\nUser defined matrix (NumPy):")
+    print(A_numpy)
+    # Constant matrix for homogeneous system AX = 0
+    Constant_Matrix = np.zeros(NR)
+    # Solve using NumPy (only works if unique solution)
+    try:
+        X = np.linalg.solve(A_numpy, Constant_Matrix)
+        print("\nUnique Solution (NumPy):", X)
+    except np.linalg.LinAlgError:
+        print("\nThe system does NOT have a unique solution (Rank < No. of variables).")
+        print("Use SymPy to get the parametric solution:")
+        sol = A_sympy.gauss_jordan_solve(sp.zeros(NR, 1))
+        print("\nGeneral Solution (SymPy):", sol)
+
+# Q6. Finding Null space and Nullity of a Matrix.
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: "))
+    Elements = []
+    print("Enter elements row by row:")
+    for i in range(NR):
+        row = list(map(float, input().split()))
+        Elements.append(row)
+    A_sympy = sp.Matrix(Elements)
+    A_numpy = np.array(Elements, dtype=np.float64)
+    print("User defined matrix (SymPy):")
+    print(A_sympy)
+    print("User defined matrix (NumPy):")
+    print(A_numpy)
+    Nullspace = A_sympy.nullspace()
+    NoC = A_numpy.shape[1]
+    Rank = A_sympy.rank()
+    Nullity = NoC - Rank
+    print("Nullity of matrix A:", Nullity)
+    print("Null space of matrix A:")
+    for vec in Nullspace:
+        print(vec)
+
+
+# Q7. Finding Column space and Row space of a Matrix.
+Input (code)
+
+   import numpy as np
+    import sympy as sp
+    # Finding column space and row space
+    NR = int(input("Enter number of rows: "))
+    NC = int(input("Enter number of columns: "))
+    entries = list(map(float, input("Enter matrix elements row-wise separated by space: ").split()))
+    # Reshape into matrix
+    A = np.array(entries).reshape(NR, NC)
+    # Convert to sympy matrix
+    A_sym = sp.Matrix(A)
+    # Column space and row space
+    M_columnspace = A_sym.columnspace()
+    M_rowspace = A_sym.rowspace()
+    print("Column space of matrix A:")
+    print(M_columnspace)
+    print("\nRow space of matrix A:")
+    print(M_rowspace)
+
+
+    
+    
+# Q8. Checking the Linear dependence of a Matrix and expressing it as a linear combination if it is linearly independent. 
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+    NR = int(input("Enter the number of rows: "))
+    NC = int(input("Enter the number of columns: "))
+    print("Enter the entries in a single line (separated by space):")
+    entries = list(map(int, input().split()))
+    A_np = np.array(entries).reshape(NR, NC)
+    A = sp.Matrix(A_np)
+    rank = A.rank()
+    print(f"\nRank = {rank}")
+    if rank == NC:
+        print("Columns are linearly independent.")
+    else:
+        print("Columns are linearly dependent.")
+    Ns = A.nullspace()
+    print("\nNull space vectors (basis):")
+    for v in Ns:
+        print(v)
+    print("\nNullspace relation (v1, v2, ...):")
+    for v in Ns:
+        expr = " + ".join([f"({v[i]})*x{i+1}" for i in range(NC)]) + " = 0"
+        print(expr)
+
+# Q9. Finding the orthonormal basis of a set of vectors using Gram Schmidt orthogonalization Process. 
+Input (code)
+
+    import sympy as sp
+    import numpy as np
+    # Finding the orthonormal basis of given vector space using Gram-Schmidt orthogonalization process
+    n = int(input("Enter vector dimension: "))
+    print("Enter 3 vectors (each with", n, "elements):")
+    v = [np.array(list(map(float, input().split()))) for _ in range(3)]
+    # Gram-Schmidt process
+    u = [v[0]]
+    u.append(v[1] - (np.dot(v[1], u[0]) / np.dot(u[0], u[0])) * u[0])
+    u.append(v[2] - sum((np.dot(v[2], ui) / np.dot(ui, ui)) * ui for ui in u[:2]))
+    # Normalize
+    E = [ui / np.linalg.norm(ui) for ui in u]
+        # Output
+    print("\nOrthonormal basis vectors:")
+    for i, ei in enumerate(E, 1):
+        print(f"e{i} =", np.round(ei, 4))
+
+# Q10. Checking the Diagonizable property of Matrix and hence finding the corresponding eigenvalues and verifying Cayley Hamilton Theorem.. 
+
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+    NR = int(input("Enter the number of rows: "))
+    NC = int(input("Enter the number of columns: "))
+    print("Enter the entries in a single line (separated by space):")
+    entries = list(map(int, input().split()))
+    A = np.array(entries).reshape(NR, NC)
+    M = sp.Matrix(A)
+    try:
+        P, D = M.diagonalize()
+        print("\nMatrix is diagonalizable.")
+        print("\nP (Eigenvectors):\n", P)
+        print("\nD (Diagonal Matrix of Eigenvalues):\n", D)
+    except:
+        print("\nMatrix is not diagonalizable.")
+    p = M.charpoly()
+    print("\nCharacteristic Polynomial:", p.as_expr())
+    print("\nVerifying Cayley-Hamilton Theorem...")
+    cayley_hamilton_result = p.eval(M)
+    print("\np(A) =\n", cayley_hamilton_result)
+    if cayley_hamilton_result == sp.zeros(*M.shape):
+        print("\nCayley-Hamilton theorem verified successfully!")
+    else:
+        print("\nCayley-Hamilton theorem NOT satisfied(may be due to rounding or symbolic issues).")
+    
+# Q11. Linear Algebra : Coding and Decoding of a Message using non singular matrices. 
+Input (code)
+    
+    # Linear Algebra: Coding and Decoding of Message using Non-singular Matrix
+    import math
+    from sympy import Matrix
+    # take message
+    msg = input("Enter the message to be encoded: ")
+    # convert characters to numbers (A=1 ... Z=26, others=0)
+    Nums = [ord(c.upper()) - 64 if c.isalpha() else 0 for c in msg]
+    # pad to multiple of 3
+    pad = (-len(Nums)) % 3
+    Nums += [0] * pad
+    # key matrix (must be non-singular)
+    K = Matrix([[2, 3, 1],
+                [1, 1, 1],
+                [1, 2, 2]])
+    Kinv = K.inv()
+    # break into blocks of size 3
+    Blocks = [Matrix(Nums[i:i+3]) for i in range(0, len(Nums), 3)]
+    # encode: K * block
+    Encoded_blocks = [K * b for b in Blocks]
+    # flatten encoded list
+    Encoded = [int(x) for B in Encoded_blocks for x in list(B)]
+    print("\nEncoded Message (numeric):", Encoded)
+    # decode blockwise using K⁻¹
+    Decoded_blocks = [Kinv * B for B in Encoded_blocks]
+    Decoded_nums = [int(round(float(x))) for D in Decoded_blocks for x in list(D)]
+    # convert numbers back to characters
+    Decoded_text = ''.join(chr(n + 64) if 1 <= n <= 26 else ' ' for n in Decoded_nums).strip()
+    print("Decoded Message:", Decoded_text)
+
+# Q12. Finding Gradient of a Vector Field.
+Input (code)
+    import numpy as np
+    import sympy as sp
+
+    # Gradient of scalar field
+    x, y, z = sp.symbols('x y z')
+
+    expr_input = input("Enter scalar function f(x,y,z) (default: x**2*y + sin(z)): ")
+    if expr_input == "":
+        expr_input = "x**2*y + sin(z)"
+
+    f = sp.sympify(expr_input)
+
+    Df_dx = sp.diff(f, x)
+    Df_dy = sp.diff(f, y)
+    Df_dz = sp.diff(f, z)
+
+    print("\nFunction f(x,y,z) =", f)
+    print("Gradient ∇f = [∂f/∂x, ∂f/∂y, ∂f/∂z]")
+    print("∂f/∂x =", Df_dx)
+    print("∂f/∂y =", Df_dy)
+    print("∂f/∂z =", Df_dz)
+
+# Q13. Finding Divergence of a Vector Field.
+Input (code)
+
+    import numpy as np
+    import sympy as sp
+
+    # divergence of vector field
+    x, y, z = sp.symbols('x y z')
+
+    # Inputs with defaults
+    P_input = input("Enter P(x,y,z) (default: x*y): ").strip()
+    Q_input = input("Enter Q(x,y,z) (default: y*z): ").strip()
+    R_input = input("Enter R(x,y,z) (default: z*x): ").strip()
+
+    # Apply defaults if empty
+    P = P_input if P_input else "x*y"
+    Q = Q_input if Q_input else "y*z"
+    R = R_input if R_input else "z*x"
+
+    # Convert to SymPy expressions
+    P = sp.sympify(P)
+    Q = sp.sympify(Q)
+    R = sp.sympify(R)
+
+    # Compute Divergence = dP/dx + dQ/dy + dR/dz
+    div = sp.diff(P, x) + sp.diff(Q, y) + sp.diff(R, z)
+
+    print("\nVector Field F = (P, Q, R) =", (P, Q, R))
+    print("Divergence ∇·F =", sp.simplify(div))
+
+
+#Q14. Finding Curl of the vector field
+Input (code)
+
+
+
+    import numpy as np
+    import sympy as sp
+    # curl of a vector field
+    x, y, z = sp.symbols('x y z')
+    P = input("Enter P(x,y,z) (default: y*z): ").strip()
+    Q = input("Enter Q(x,y,z) (default: z*x): ").strip()
+    R = input("Enter R(x,y,z) (default: x*y): ").strip()
+    # Apply defaults if empty
+    if P == "":
+        P = "y*z"
+    if Q == "":
+        Q = "z*x"
+    if R == "":
+        R = "x*y"
+    # Convert to sympy expressions
+    P = sp.sympify(P)
+    Q = sp.sympify(Q)
+    R = sp.sympify(R)
+    # Compute curl
+    curl_x = sp.diff(R, y) - sp.diff(Q, z)
+    curl_y = sp.diff(P, z) - sp.diff(R, x)
+    curl_z = sp.diff(Q, x) - sp.diff(P, y)
+    print("\nVector Field F =", (P, Q, R))
+    print("\nCurl ∇×F = ( ∂R/∂y − ∂Q/∂z , ∂P/∂z − ∂R/∂x , ∂Q/∂x − ∂P/∂y )\n")
+    print("∂R/∂y − ∂Q/∂z =", curl_x)
+    print("∂P/∂z − ∂R/∂x =", curl_y)
+    print("∂Q/∂x − ∂P/∂y =", curl_z)
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+ 
